@@ -1,0 +1,34 @@
+{% extends 'partial/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">First</th>
+      <th scope="col">Last</th>
+      <th scope="col">Class</th>
+      <th scope="col">Section</th>
+      <th scope="col">Roll</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for student in students %}
+    <tr>
+      <th scope="row">{{forloop.counter}}</th>
+      <td>{{student.first_name}}</td>
+      <td>{{student.last_name}}</td>
+      <td>{{student.profile.Class}}</td>
+      <td>{{student.profile.section}}</td>
+      <td>{{student.profile.roll}}</td>
+      <td>
+        <ul class='list-inline'>
+          <li class='list-inline-item'><a href="{% url 'main:student-update' student.id %}" class='btn-sm btn-warning'>Edit</a></li>
+          <li class='list-inline-item'><a href="{% url 'main:user-delete' student.id %}" class='btn-sm btn-danger'>Delete</a></li>
+        </ul>
+      </td>
+{% endfor %}
+  </tbody>
+</table>
+{% endblock %}

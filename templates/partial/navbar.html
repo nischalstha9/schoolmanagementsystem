@@ -11,7 +11,20 @@
       <li class="nav-item active">
         <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
       </li>
-      {% comment %} <li class="nav-item">
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'main:new-admission' %}">New Admission</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'main:new-teacher' %}">New Teacher</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'main:student-list' %}">Student List</a>
+      </li>
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'main:teacher-list' %}">Teacher List</a>
+      </li>
+      {% comment %}
+      <li class="nav-item">
         <a class="nav-link" href="#">Link</a>
       </li>
       <li class="nav-item dropdown">
@@ -27,7 +40,8 @@
       </li>
       <li class="nav-item">
         <a class="nav-link disabled" href="#">Disabled</a>
-      </li> {% endcomment %}
+      </li>
+      {% endcomment %}
     </ul>
     <form class="form-inline my-2 my-lg-0" method='GET' action='/search'>
       <input class="form-control my-1 mr-sm-2" required='required' type="search" placeholder="Search Headlines" name='q' data-toggle="popover" data-placement="bottom" data-content="Press enter to search" value="{{ query }}" style="" data-original-title="" title="">

@@ -66,8 +66,62 @@ class User(AbstractBaseUser, PermissionsMixin):
             self._type = self.base_type
         return super().save(*args, **kwargs)
 
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
     # def get_absolute_url(self):
     #     return "/users/%i/" % (self.pk)
+
+class TeacherManager(models.Manager):
+    def get_queryset(self, *args, **kwargs):
+        return super().get_queryset(*args, **kwargs).filter(_type=User.Types.TEACHER)
+
+class TeacherProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='TeacherProfile')
+    address = models.CharField(max_length=255, null=True, blank=True)
+    education = models.CharField(max_length=255, null=True, blank=True)
+    major_subject = models.CharField(max_length=255, null=True, blank=True)
+    contact = models.IntegerField(null=True, blank=True)
+    salary = models.IntegerField(null=True, blank=True)
+    
+    def __str__(self):
+        return f"{self.user.first_name} {self.user.last_name}'s Profile (TEACHER)"
+
+class Teacher(User):
+    base_type = User.Types.TEACHER
+    objects = TeacherManager()
+
+    @property
+    def profile(self):
+        return self.TeacherProfile
+
+    class Meta:
+        proxy = True
+
+class Section(models.Model):
+    name = models.CharField(max_length = 10)
+
+    class Meta:
+        verbose_name = "Section"
+        verbose_name_plural = "Sections"
+
+    def __str__(self):
+        return self.name
+
+    # def get_absolute_url(self):
+    #     return reverse("Section_detail", kwargs={"pk": self.pk})
+
+class Class (models.Model):
+    std = models.IntegerField()
+    class_teacher = models.ForeignKey(Teacher, on_delete=models.SET_NULL, null=True, blank=True)
+    fee = models.IntegerField()
+
+    class Meta:
+        verbose_name = "Class"
+        verbose_name_plural = "Classes"
+
+    def __str__(self):
+        return f"Class {self.std}"
 
 class StudentManager(models.Manager):
     def get_queryset(self, *args, **kwargs):
@@ -76,13 +130,15 @@ class StudentManager(models.Manager):
 class StudentProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="StudentProfile")#related_name is used to call object
     roll = models.IntegerField()
-    _class = models.IntegerField()
-    parent = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="Parent")
+    Class = models.ForeignKey(Class, on_delete=models.SET_NULL, null=True, related_name='klas')
+    section = models.ForeignKey(Section, on_delete=models.SET_NULL, null=True)
     address = models.CharField( max_length=200, null=True, blank=True)
     discount = models.IntegerField(null=True, blank=True)
-
+    parent_name = models.CharField(max_length = 254)
+    contact = models.IntegerField()
+    
     def __str__(self):
-        return f"{self.user.first_name}'s Profile"
+        return f"{self.user.first_name} {self.user.last_name}'s Profile"
 
 class Student(User):
     base_type = User.Types.STUDENT
@@ -92,5 +148,5 @@ class Student(User):
         proxy = True
 
     @property
-    def more(self):
+    def profile(self):
         return self.StudentProfile

@@ -1,5 +1,6 @@
 # BoilerPlate
 Django-Boilerplate with authentication
+By Nischal Shrestha😊
 
 
 Run ```git clone https://github.com/nischalstha9/BoilerPlate``` <br />
@@ -17,4 +18,3 @@ create .env file in BASE_DIR and write<br />
 ```EMAIL_HOST_PASSWORD = 'yourpasswith3rdpartyaccess'```<br />
 
 #Enjoy
-

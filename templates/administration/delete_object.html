@@ -1,0 +1,7 @@
+{% extends 'partial/base.html' %}
+{% block content %}
+<form method="post" class='container col-4'>{% csrf_token %}
+    <p>Are you sure you want to delete "{{ object }}"?</p>
+    <input type="submit" class='btn btn-outline-danger' value="Confirm">
+</form>
+{% endblock content %}
