@@ -3,12 +3,10 @@ from django.contrib.admin.views.decorators import staff_member_required
 from .forms import AdmissionForm1, AdmissionForm2, TeacherProfileForm, TeacherForm
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
-from accounts.models import Student, Teacher
+from accounts.models import Student, Teacher, StudentProfile, Class, Section
 from django.views.generic import ListView, DeleteView
 from accounts.models import User
 
-
-# Create your views here.
 def home(request):
     return render(request, 'home.html')
 
@@ -20,6 +18,21 @@ class StudentListView(ListView):
     template_name = "administration/student_list.html"
     paginate_by = 50
     context_object_name = 'students'
+    def get_queryset(self, *args, **kwargs):
+        qs = super().get_queryset(**kwargs)
+        clas = self.request.GET.get('class')
+        sec = self.request.GET.get('sec')
+        if clas is not None:
+            qs = qs.filter(StudentProfile__Class=clas)
+        if sec is not None:
+            qs = qs.filter(StudentProfile__section=sec)
+        return qs
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["classes"] = Class.objects.all()
+        context["sections"] = Section.objects.all()
+        return context
+    
 
 class TeacherListView(ListView):
     model = Teacher
@@ -80,7 +93,6 @@ def StudentUpdateView(request, pk, *args, **kwargs):
         messages.success(request, f'Student Updated Successfully!')
         return redirect('/')
     return render(request, 'administration/create_student.html', context)
-
 
 
 @staff_member_required

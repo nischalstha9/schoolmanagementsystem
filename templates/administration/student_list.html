@@ -1,6 +1,22 @@
 {% extends 'partial/base.html' %}
 {% load crispy_forms_tags %}
 {% block content %}
+<form class=''>
+  <select name='class' class="">
+    <option value='' selected>Select Class</option>
+  {% for class in classes %}
+    <option value = "{{class.id}}">{{class}}</option>
+  {% endfor %}
+  </select><br>
+  <select name='section' class="">
+    <option value=''>Select Section</option>
+  {% for section in sections %}
+    <option value = "{{section.id}}">{{section}}</option>
+  {% endfor %}
+  </select><br>
+  <input type="submit" class='btn btn-primary 'value="Filter">
+  <a href="{% url 'main:student-list' %}" class='btn btn-secondary'>Reset Filter</a>
+</form><br>
 <table class="table">
   <thead>
     <tr>

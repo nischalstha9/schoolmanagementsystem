@@ -1,6 +1,5 @@
 from django.forms import ModelForm, TextInput
-from accounts.models import Student, StudentProfile, Teacher, TeacherProfile
-
+from accounts.models import Student, StudentProfile, Teacher, TeacherProfile, Class, Section
 
 class AdmissionForm1(ModelForm):
     class Meta:
