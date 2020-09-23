@@ -1,0 +1,30 @@
+{% extends 'partial/base.html' %}
+
+{% block title %}
+  {{title}}
+{% endblock title %}
+
+
+
+{% block title-side %}{% endblock title-side %}
+
+{% block content %}
+  <div class="row">
+    <div class="col-sm-12">
+      <form method="POST">
+        {% csrf_token %}
+
+        <div class="mb-3">
+          {{form}}
+        </div>
+
+
+        <input type="submit" value="Save" class="w-25 btn btn-primary">
+
+      </form>
+    </div>
+  </div>
+
+{% endblock content %}
+
+

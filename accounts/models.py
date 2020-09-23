@@ -3,6 +3,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
+from django.core.validators import RegexValidator
 
 class UserManager(BaseUserManager):
 
@@ -81,7 +82,8 @@ class TeacherProfile(models.Model):
     address = models.CharField(max_length=255, null=True, blank=True)
     education = models.CharField(max_length=255, null=True, blank=True)
     major_subject = models.CharField(max_length=255, null=True, blank=True)
-    contact = models.IntegerField(null=True, blank=True)
+    mobile_num_regex      = RegexValidator(regex="^[0-9]{10,15}$", message="Entered mobile number isn't in a right format!")
+    contact  = models.CharField(validators=[mobile_num_regex], max_length=13, blank=True)
     salary = models.IntegerField(null=True, blank=True)
     
     def __str__(self):
@@ -112,7 +114,7 @@ class Section(models.Model):
     #     return reverse("Section_detail", kwargs={"pk": self.pk})
 
 class Class (models.Model):
-    std = models.IntegerField()
+    std = models.CharField(max_length=50)
     class_teacher = models.ForeignKey(Teacher, on_delete=models.SET_NULL, null=True, blank=True)
     fee = models.IntegerField()
 
@@ -128,6 +130,10 @@ class StudentManager(models.Manager):
         return super().get_queryset(*args, **kwargs).filter(_type=User.Types.STUDENT)
 
 class StudentProfile(models.Model):
+    GENDER = [
+        ('male', 'Male'),
+        ('female', 'Female')
+    ]
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="StudentProfile")#related_name is used to call object
     roll = models.IntegerField()
     Class = models.ForeignKey(Class, on_delete=models.SET_NULL, null=True, related_name='klas')
@@ -135,7 +141,11 @@ class StudentProfile(models.Model):
     address = models.CharField( max_length=200, null=True, blank=True)
     discount = models.IntegerField(null=True, blank=True)
     parent_name = models.CharField(max_length = 254)
-    contact = models.IntegerField()
+    gender = models.CharField(max_length=10, choices=GENDER, default='male')
+    date_of_birth = models.DateField(default=timezone.now)
+    date_of_admission = models.DateField(default=timezone.now)
+    mobile_num_regex = RegexValidator(regex="^[0-9]{10,15}$", message="Entered mobile number isn't in a right format!")
+    contact  = models.CharField(validators=[mobile_num_regex], max_length=13, blank=True)
     
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name}'s Profile"

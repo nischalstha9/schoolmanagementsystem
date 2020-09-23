@@ -1,0 +1,57 @@
+{% extends 'partial/base.html' %}
+
+{% block title %}Students{% endblock title %}
+
+{% block breadcrumb %}
+<a class="btn btn-primary" href="{% url 'main:new-admission' %}"><i
+    class="fas fa-plus"></i> New student</a>
+{% comment %} <a class="btn btn-primary" href="{% url 'student-upload' %}"><i
+    class="fas fa-upload"></i> Upload students</a> {% endcomment %}
+{% endblock breadcrumb %}
+
+{% block content %}
+  <div class="table-responsive">
+    <table id="studenttable" class="table table-bordered table-hover" data-page-length='100'>
+      <thead class="thead-light">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">First</th>
+          <th scope="col">Last</th>
+          <th scope="col">Class</th>
+          <th scope="col">Section</th>
+          <th scope="col">Roll</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        {% for student in students %}
+          <tr>
+          <th scope="row">{{forloop.counter}}</th>
+          <td>{{student.first_name}}</td>
+          <td>{{student.last_name}}</td>
+          <td>{{student.profile.Class}}</td>
+          <td>{{student.profile.section}}</td>
+          <td>{{student.profile.roll}}</td>
+          <td>
+            <ul class='list-inline'>
+              <li class='list-inline-item'><a href="{% url 'main:student-update' student.id %}" class='btn-sm btn-warning'>Edit</a></li>
+              <li class='list-inline-item'><a href="{% url 'main:user-delete' student.id %}" class='btn-sm btn-danger'>Delete</a></li>
+            </ul>
+          </td>
+        </tr>
+        {% endfor %}
+
+      </tbody>
+    </table>
+  </div>
+{% endblock content %}
+
+
+{% block morejs %}
+<script>
+  $('#studenttable').DataTable({
+  });
+</script>
+
+{% endblock morejs %}

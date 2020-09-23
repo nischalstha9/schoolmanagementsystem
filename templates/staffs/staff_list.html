@@ -1,0 +1,53 @@
+{% extends 'partial/base.html' %}
+
+{% block title %}staffs{% endblock title %}
+
+{% block breadcrumb %}
+<a class="btn btn-primary" href="{% url 'main:new-teacher' %}"><i
+    class="fas fa-plus"></i> New staff</a>
+{% endblock breadcrumb %}
+
+{% block content %}
+  <table id="stafftable" class="table table-bordered table-hover">
+    <thead class="thead-light">
+        <tr>
+        <th scope="col">#</th>
+        <th scope="col">First</th>
+        <th scope="col">Last</th>
+        <th scope="col">Address</th>
+        <th scope="col">Contact</th>
+        <th scope="col">Salary</th>
+        <th scope="col">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      {% for teacher in teachers %}
+          <tr>
+            <th scope="row">{{forloop.counter}}</th>
+            <td>{{teacher.first_name}}</td>
+            <td>{{teacher.last_name}}</td>
+            <td>{{teacher.profile.address}}</td>
+            <td>{{teacher.profile.contact}}</td>
+            <td>{{teacher.profile.salary}}</td>
+            <td>
+              <ul class='list-inline'>
+                  <li class='list-inline-item'><a href="{% url 'main:teacher-update' teacher.id %}" class='btn-sm btn-warning'>Edit</a></li>
+                  <li class='list-inline-item'><a href="{% url 'main:user-delete' teacher.id %}" class='btn-sm btn-danger'>Delete</a></li>
+              </ul>
+            </td>
+      {% endfor %}
+
+    </tbody>
+  </table>
+{% endblock content %}
+
+
+{% block morejs %}
+<script>
+   $('#stafftable').DataTable({
+    select: false
+    });
+</script>
+
+{% endblock morejs %}
